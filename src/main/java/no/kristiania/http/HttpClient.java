@@ -8,7 +8,7 @@ import java.util.Map;
 public class HttpClient {
     private int responseCode = 200;
     private Map<String, String> responseHeaders = new HashMap<>();
-    private String responseBody;
+    private String responseBody = "";
 
     public HttpClient(final String host, int port, final String requestTarget) throws IOException {
 
@@ -31,6 +31,10 @@ public class HttpClient {
             String headerName = headerLine.substring(0, colonPos);
             String headerValue = headerLine.substring(colonPos + 1).trim();
             responseHeaders.put(headerName, headerValue);
+        }
+        int contentLength = Integer.parseInt(getResponseHeader("Content-Length"));
+        for (int i = 0; i < contentLength; i++) {
+            responseBody+=(char)socket.getInputStream().read();
         }
     }
 
