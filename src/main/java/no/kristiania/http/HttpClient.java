@@ -16,13 +16,23 @@ public class HttpClient {
 
         socket.getOutputStream().write(request.getBytes());
 
+        String responseLine = readLine(socket);
+        System.out.println(responseLine);
+        String[] responseLineParts = responseLine.split(" ");
+        responseCode = Integer.parseInt(responseLineParts[1]);
+    }
+
+    private String readLine(Socket socket) throws IOException {
+        StringBuilder sb = new StringBuilder();
+
         int c;
         while((c = socket.getInputStream().read()) != -1) {
             if(c == '\n') {
                 break;
             }
-            System.out.print((char) c);
+            sb.append((char) c);
         }
+        return sb.toString();
     }
 
     public static void main(String[] args) throws IOException {
@@ -31,5 +41,9 @@ public class HttpClient {
 
     public int getResponseCode() {
         return responseCode;
+    }
+
+    public String getResponseHeader(String headerName) {
+        return null;
     }
 }
