@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class HttpClient {
-    private int responseCode;
+    private int responseCode = 200;
 
     public HttpClient(final String host, int port, final String requestTarget) throws IOException {
 
