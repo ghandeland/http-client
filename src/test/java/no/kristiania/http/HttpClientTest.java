@@ -9,22 +9,32 @@ import static org.junit.jupiter.api.Assertions.*;
 class HttpClientTest {
     @Test
     void shouldReturnSuccessfulStatusCode() throws IOException {
-        HttpClient client = new HttpClient("urlecho.appspot.com", 80, "/echo");
+        HttpClient client = makeEchoRequest("/echo");
 
         assertEquals(200, client.getResponseCode());
     }
 
     @Test
     void shouldReturnUnsuccessfulStatusCode() throws IOException {
-        HttpClient client = new HttpClient("urlecho.appspot.com", 80, "/echo?status=404");
+        HttpClient client = makeEchoRequest("/echo?status=404");
 
         assertEquals(404, client.getResponseCode());
     }
 
     @Test
     void shouldReadResponseHeader() throws IOException {
-        HttpClient client = new HttpClient("urlecho.appspot.com", 80, "/echo?body=Hello");
+        HttpClient client = makeEchoRequest("/echo?body=Hello");
 
         assertEquals("5", client.getResponseHeader("Content-Length"));
+    }
+
+    private HttpClient makeEchoRequest(String s) throws IOException {
+        return new HttpClient("urlecho.appspot.com", 80, s);
+    }
+
+    @Test
+    void shouldReadResponseBody() throws IOException {
+        HttpClient client = makeEchoRequest("/echo?body=Hello");
+        assertEquals("Hello", client.getResponseBody());
     }
 }
